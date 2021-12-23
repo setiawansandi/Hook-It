@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:minHeight="?attr/actionBarSize"
-        app:theme="@style/ToolbarTheme"
+        android:theme="@style/ToolbarTheme"
         app:titleTextColor="@color/black">
 
         <TextView
@@ -110,6 +110,7 @@
                         android:fontFamily="@font/poppins"
                         android:hint="DD/MM/YYYY"
                         android:inputType="date"
+                        android:maxLength="10"
                         android:minHeight="48dp"
                         android:theme="@style/EditTextTheme"
                         tools:ignore="SpeakableTextPresentCheck" />

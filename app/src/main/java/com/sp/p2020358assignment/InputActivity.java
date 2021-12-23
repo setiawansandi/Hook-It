@@ -10,25 +10,39 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InputActivity extends AppCompatActivity {
     private EditText fishname, fishdate, fishlength, fishweight;
     private TextView fishlocation;
     private ImageButton fishupload, fishgetloc;
     private Button done, cancel;
+    private Bitmap bitmap;
+    private Drawable oldDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Objects.requireNonNull(getSupportActionBar()).hide();
+        //Objects.requireNonNull(getSupportActionBar()).hide();     // hide action bar
 
         // assignment of activity launcher (inside onAttach or onCreate, i.e, before the activity is displayed)
         ActivityResultLauncher<Intent> imgResultLauncher = registerForActivityResult(
@@ -43,12 +57,19 @@ public class InputActivity extends AppCompatActivity {
                         if (null != selectedImageUri) {
                             // update the preview image in the layout
                             fishupload.setImageURI(selectedImageUri);
+                            try {
+                                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     }
                 });
 
         setContentView(R.layout.activity_input);
 
+        // toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -67,6 +88,8 @@ public class InputActivity extends AppCompatActivity {
         done = (Button) findViewById(R.id.button_done);
         cancel = (Button) findViewById(R.id.button_cancel);
 
+        oldDrawable = fishupload.getDrawable();
+
         fishupload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +102,42 @@ public class InputActivity extends AppCompatActivity {
                 imgResultLauncher.launch(Intent.createChooser(i, "Select Picture"));
             }
         });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (fishupload.getDrawable() == oldDrawable) Toast.makeText(v.getContext(), "You haven't chosen an image yet", Toast.LENGTH_LONG).show();
+                else {
+
+                    String nameStr = fishname.getText().toString();
+                    String weightStr = fishweight.getText().toString();
+                    String lengthStr = fishlength.getText().toString();
+                    String dateStr = fishdate.getText().toString();
+
+                    if (nameStr.trim().length() == 0 || weightStr.trim().length() == 0 || lengthStr.trim().length() == 0 || dateStr.trim().length() == 0)
+                        Toast.makeText(v.getContext(), "Missing Inputs", Toast.LENGTH_LONG).show();
+                    else {
+                        // convert bitmap to bytearray + vice versa
+
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                        byte[] byteArray = byteArrayOutputStream .toByteArray();
+
+
+                        // sent data to sql
+                        finish();
+                    }
+                }
+            }
+        });
+
     }
 
     @Override
@@ -88,6 +147,12 @@ public class InputActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 
 

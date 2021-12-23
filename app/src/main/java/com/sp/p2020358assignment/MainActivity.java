@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Objects.requireNonNull(getSupportActionBar()).hide();   // hide action bar
+        // Objects.requireNonNull(getSupportActionBar()).hide();   // hide action bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);   // hide status bar
         getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.secondary));  // change status bar colour
         setContentView(R.layout.activity_main);
