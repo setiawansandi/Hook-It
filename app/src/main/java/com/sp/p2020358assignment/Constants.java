@@ -23,13 +23,13 @@ public class Constants {
             +C_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             +C_NAME + " TEXT,"
             +C_DATE + " TEXT,"
-            +C_LENGTH + " REAL,"
-            +C_WEIGHT + " REAL,"
+            +C_LENGTH + " TEXT,"
+            +C_WEIGHT + " TEXT,"
             +C_LAT + " REAL,"
             +C_LON + " REAL,"
             +C_IMAGE + " BLOB,"
             +C_ADD_TIMESTAMP + " TEXT,"
-            +C_UPDATE_TIMESTAMP + " TEXT,"
+            +C_UPDATE_TIMESTAMP + " TEXT"
             + ");";
 
 }

@@ -38,6 +38,7 @@ public class InputActivity extends AppCompatActivity {
     private Button done, cancel;
     private Bitmap bitmap;
     private Drawable oldDrawable;
+    private DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +88,11 @@ public class InputActivity extends AppCompatActivity {
         fishgetloc = (ImageButton) findViewById(R.id.imgbtn_getloc);
         done = (Button) findViewById(R.id.button_done);
         cancel = (Button) findViewById(R.id.button_cancel);
-
         oldDrawable = fishupload.getDrawable();
+        dbHelper = new DatabaseHelper(this);
 
+
+        // onClickListener
         fishupload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,33 +113,7 @@ public class InputActivity extends AppCompatActivity {
             }
         });
 
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (fishupload.getDrawable() == oldDrawable) Toast.makeText(v.getContext(), "You haven't chosen an image yet", Toast.LENGTH_LONG).show();
-                else {
-
-                    String nameStr = fishname.getText().toString();
-                    String weightStr = fishweight.getText().toString();
-                    String lengthStr = fishlength.getText().toString();
-                    String dateStr = fishdate.getText().toString();
-
-                    if (nameStr.trim().length() == 0 || weightStr.trim().length() == 0 || lengthStr.trim().length() == 0 || dateStr.trim().length() == 0)
-                        Toast.makeText(v.getContext(), "Missing Inputs", Toast.LENGTH_LONG).show();
-                    else {
-                        // convert bitmap to bytearray + vice versa
-
-                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                        byte[] byteArray = byteArrayOutputStream .toByteArray();
-
-
-                        // sent data to sql
-                        finish();
-                    }
-                }
-            }
-        });
+        done.setOnClickListener(onDone);
 
     }
 
@@ -155,5 +132,39 @@ public class InputActivity extends AppCompatActivity {
         return super.onSupportNavigateUp();
     }
 
+    View.OnClickListener onDone = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // get data
+            if (fishupload.getDrawable() == oldDrawable) Toast.makeText(v.getContext(), "You haven't chosen an image yet", Toast.LENGTH_LONG).show();
+            else {
 
+                String nameStr = fishname.getText().toString();
+                String weightStr = fishweight.getText().toString();
+                String lengthStr = fishlength.getText().toString();
+                String dateStr = fishdate.getText().toString();
+                String timestamp = "" + System.currentTimeMillis();
+                double lon = 0.0;
+                double lat = 0.0;
+
+                if (nameStr.trim().length() == 0 || weightStr.trim().length() == 0 || lengthStr.trim().length() == 0 || dateStr.trim().length() == 0)
+                    Toast.makeText(v.getContext(), "Missing Inputs", Toast.LENGTH_LONG).show();
+                else {
+                    // convert bitmap to bytearray + vice versa
+
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                    byte[] image = byteArrayOutputStream .toByteArray();
+
+                    // send data to sql database
+                    long id = dbHelper.insertInfo(nameStr, dateStr, lengthStr, weightStr, lat, lon, image, timestamp, timestamp);
+
+                    Toast.makeText(v.getContext(), "Record added to id: " + id, Toast.LENGTH_SHORT).show();
+
+                    // change to intents later
+                    //finish();
+                }
+            }
+        }
+    };
 }

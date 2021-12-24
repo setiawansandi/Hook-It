@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // insert info function
-    public long insertInfo(String name, String date, double length, double weight, double lat, double lon, byte[] image, String addTimeStamp, String updateTimeStamp) {
+    public long insertInfo(String name, String date, String length, String weight, double lat, double lon, byte[] image, String addTimeStamp, String updateTimeStamp) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
