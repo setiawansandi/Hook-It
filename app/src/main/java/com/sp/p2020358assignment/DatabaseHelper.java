@@ -1,11 +1,16 @@
 package com.sp.p2020358assignment;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.view.Display;
 
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(@Nullable Context context) {
@@ -41,5 +46,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long id = db.insert(Constants.TABLE_NAME, Constants.C_NAME, cv);
         db.close();
         return id;
+    }
+
+    public ArrayList<Model> getAllData (String orderBy) {
+        ArrayList<Model> arrayList = new ArrayList<>();
+
+        // query for select all info in database
+        String selectQuery = "SELECT * FROM " + Constants.TABLE_NAME + " ORDER BY " + orderBy;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+
+        // curate the data from all the column in each row, moveToNext() -> Move the cursor to the next row, start from index -1
+        if(cursor.moveToNext()) {
+            do {
+                Model model = new Model(
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_NAME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_DATE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_LENGTH)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_WEIGHT)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_ADD_TIMESTAMP)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Constants.C_UPDATE_TIMESTAMP)),
+                        cursor.getBlob(cursor.getColumnIndexOrThrow(Constants.C_IMAGE)),
+                        cursor.getDouble(cursor.getColumnIndexOrThrow(Constants.C_LAT)),
+                        cursor.getDouble(cursor.getColumnIndexOrThrow(Constants.C_LON))
+                );
+
+                arrayList.add(model);
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+        return arrayList;
     }
 }

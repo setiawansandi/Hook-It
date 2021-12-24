@@ -46,6 +46,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.info:
+                intent = new Intent(this, DisplayActivity.class);
+                startActivity(intent);
                 break;
             case R.id.about:
                 break;

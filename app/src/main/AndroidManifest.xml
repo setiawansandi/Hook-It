@@ -10,8 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.P2020358Assignment">
         <activity
+            android:name=".DisplayActivity"
+            android:exported="false" />
+        <activity
             android:name=".InputActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".HomeActivity"
             android:exported="false"

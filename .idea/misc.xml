@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.26614583333333336" />
+        <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.26614583333333336" />
         <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/drawable/ic_bg.xml" value="0.26614583333333336" />
         <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/drawable/ic_bg1.xml" value="0.14322916666666666" />
         <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/drawable/ic_drawing.xml" value="0.26614583333333336" />
@@ -14,10 +15,11 @@
         <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/font/poppins.xml" value="0.28020833333333334" />
         <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/font/roboto_mono.xml" value="0.28020833333333334" />
         <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/layout/action_bar.xml" value="0.21784420289855072" />
+        <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/layout/activity_display.xml" value="0.12158054711246201" />
         <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/layout/activity_home.xml" value="0.2" />
         <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/layout/activity_input.xml" value="0.264" />
         <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/layout/activity_main.xml" value="0.21784420289855072" />
-        <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/layout/row.xml" value="0.2223731884057971" />
+        <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/layout/row.xml" value="0.264" />
         <entry key="..\:/mobile_app/P2020358Assignment/app/src/main/res/layout/toolbar.xml" value="0.1" />
       </map>
     </option>

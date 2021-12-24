@@ -1,7 +1,5 @@
 package com.sp.p2020358assignment;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -11,25 +9,21 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 public class InputActivity extends AppCompatActivity {
     private EditText fishname, fishdate, fishlength, fishweight;
@@ -73,7 +67,7 @@ public class InputActivity extends AppCompatActivity {
         // toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         // getSupportActionBar().setHomeButtonEnabled(true); // ?
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // will make the icon clickable and add the < at the left of the icon. (clickable or not)
@@ -159,10 +153,9 @@ public class InputActivity extends AppCompatActivity {
                     // send data to sql database
                     long id = dbHelper.insertInfo(nameStr, dateStr, lengthStr, weightStr, lat, lon, image, timestamp, timestamp);
 
-                    Toast.makeText(v.getContext(), "Record added to id: " + id, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(v.getContext(), "Record added to id: " + id, Toast.LENGTH_SHORT).show();
 
-                    // change to intents later
-                    //finish();
+                    startActivity(new Intent(InputActivity.this, DisplayActivity.class));
                 }
             }
         }

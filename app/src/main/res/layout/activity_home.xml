@@ -64,14 +64,14 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/ic_writing" />
+                    android:background="@drawable/ic_add" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/poppins"
-                    android:text="Data Input"
+                    android:text="Add"
                     android:textAlignment="center"
                     android:textColor="@color/primary" />
             </LinearLayout>
