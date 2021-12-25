@@ -27,6 +27,8 @@ public class FishingMap extends FragmentActivity implements OnMapReadyCallback {
     private LatLng FISHLOC;
     private LatLng ME;
 
+    GPSTracker gpsTracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +36,13 @@ public class FishingMap extends FragmentActivity implements OnMapReadyCallback {
         binding = ActivityFishingMapBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        gpsTracker = new GPSTracker(this);
+
         lat = getIntent().getDoubleExtra("LATITUDE", 0);
         lon = getIntent().getDoubleExtra("LONGITUDE", 0);
         fishName = getIntent().getStringExtra("NAME");
-        myLat = getIntent().getDoubleExtra("MYLATITUDE",0);
-        myLon = getIntent().getDoubleExtra("MYLONGITUDE", 0);
+        myLat = gpsTracker.getLatitude();
+        myLon = gpsTracker.getLongitude();
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.

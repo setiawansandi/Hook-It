@@ -1,6 +1,7 @@
 package com.sp.p2020358assignment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -49,6 +50,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
         String weight = model.getWeight();
         String length_and_weight = "" + length + " cm, " + weight + " kg";
         Bitmap bitmap = BitmapFactory.decodeByteArray(bitMapBytes , 0, bitMapBytes .length);
+        double lat = model.getLat();
+        double lon = model.getLon();
 
         holder.rvimage.setImageBitmap(bitmap);
         holder.name.setText(name);
@@ -56,8 +59,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
         holder.length_and_weight.setText(length_and_weight);
 
         holder.itemView.setOnClickListener(v -> {
-
-
+            final Intent intent;
+            intent =  new Intent(context, FishingMap.class);
+            intent.putExtra("NAME", name);
+            intent.putExtra("LATITUDE",lat);
+            intent.putExtra("LONGITUDE",lon);
+            context.startActivity(intent);
         });
 
     }
