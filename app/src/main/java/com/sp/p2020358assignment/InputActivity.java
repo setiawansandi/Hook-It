@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -16,6 +17,7 @@ import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Objects;
 
 public class InputActivity extends AppCompatActivity {
@@ -35,8 +38,9 @@ public class InputActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
 
     private GPSTracker gpsTracker;
-    private double latitude = 0.0d;
-    private double longitude = 0.0d;
+    private double latitude = 0.0d, longitude = 0.0d;
+
+    private int mDate, mMonth, mYear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,25 +96,33 @@ public class InputActivity extends AppCompatActivity {
 
 
         // onClickListener
-        fishupload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // create an instance of the intent of the type image
-                Intent i = new Intent();
-                i.setType("image/*");
-                i.setAction(Intent.ACTION_GET_CONTENT);
+        fishdate.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            mDate = calendar.get(Calendar.DATE);
+            mMonth = calendar.get(Calendar.MONTH);
+            mYear = calendar.get(Calendar.YEAR);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(InputActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    fishdate.setText(dayOfMonth+"/"+month+"/"+year);
+                }
+            }, mYear, mMonth, mDate);
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
+            datePickerDialog.show();
 
-                // pass the intent to activity launcher
-                imgResultLauncher.launch(Intent.createChooser(i, "Select Picture"));
-            }
         });
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        fishupload.setOnClickListener(v -> {
+            // create an instance of the intent of the type image
+            Intent i = new Intent();
+            i.setType("image/*");
+            i.setAction(Intent.ACTION_GET_CONTENT);
+
+            // pass the intent to activity launcher
+            imgResultLauncher.launch(Intent.createChooser(i, "Select Picture"));
         });
+
+        cancel.setOnClickListener(v -> finish());
 
         done.setOnClickListener(onDone);
         fishgetloc.setOnClickListener(onGetLocation);
@@ -167,6 +179,7 @@ public class InputActivity extends AppCompatActivity {
                     //Toast.makeText(v.getContext(), "Record added to id: " + id, Toast.LENGTH_SHORT).show();
 
                     startActivity(new Intent(InputActivity.this, DisplayActivity.class));
+                    finish();
                 }
             }
         }
@@ -180,8 +193,7 @@ public class InputActivity extends AppCompatActivity {
                 longitude = gpsTracker.getLongitude();
                 String output = latitude + ", " + longitude;
                 fishlocation.setText(output);
-                Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude
-                        + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
             }
         }
     };

@@ -108,7 +108,7 @@
                         android:layout_marginRight="20dp"
                         android:ems="10"
                         android:fontFamily="@font/poppins"
-                        android:hint="DD/MM/YYYY"
+                        android:hint="Click to choose date"
                         android:inputType="date"
                         android:maxLength="10"
                         android:minHeight="48dp"

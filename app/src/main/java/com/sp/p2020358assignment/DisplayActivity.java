@@ -2,12 +2,10 @@ package com.sp.p2020358assignment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -40,6 +38,7 @@ public class DisplayActivity extends AppCompatActivity {
         fab.setOnClickListener(v -> {
             // open input activity
             startActivity(new Intent(DisplayActivity.this, InputActivity.class));
+            finish();
         });
 
     }
@@ -60,4 +59,6 @@ public class DisplayActivity extends AppCompatActivity {
         onBackPressed();
         return super.onSupportNavigateUp();
     }
+
+
 }

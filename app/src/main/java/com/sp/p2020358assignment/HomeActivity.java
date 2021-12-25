@@ -22,7 +22,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Objects.requireNonNull(getSupportActionBar()).hide();
-        getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.secondary));
+        getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.white));
         setContentView(R.layout.activity_home);
 
         input = findViewById(R.id.input);
