@@ -18,10 +18,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
 
     private Context context;
     private ArrayList<Model> arraylist;
+    // databse object
+    DatabaseHelper databaseHelper;
 
     public Adapter(Context context, ArrayList<Model> arraylist) {
         this.context = context;
         this.arraylist = arraylist;
+        databaseHelper = new DatabaseHelper(context);
     }
 
     @NonNull
@@ -51,6 +54,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
         holder.name.setText(name);
         holder.date.setText(date);
         holder.length_and_weight.setText(length_and_weight);
+
+        holder.itemView.setOnClickListener(v -> {
+
+
+        });
 
     }
 

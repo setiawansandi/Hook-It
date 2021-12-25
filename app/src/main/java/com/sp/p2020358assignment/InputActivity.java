@@ -34,6 +34,10 @@ public class InputActivity extends AppCompatActivity {
     private Drawable oldDrawable;
     private DatabaseHelper dbHelper;
 
+    private GPSTracker gpsTracker;
+    private double latitude = 0.0d;
+    private double longitude = 0.0d;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +88,7 @@ public class InputActivity extends AppCompatActivity {
         cancel = (Button) findViewById(R.id.button_cancel);
         oldDrawable = fishupload.getDrawable();
         dbHelper = new DatabaseHelper(this);
+        gpsTracker = new GPSTracker(this);
 
 
         // onClickListener
@@ -108,6 +113,7 @@ public class InputActivity extends AppCompatActivity {
         });
 
         done.setOnClickListener(onDone);
+        fishgetloc.setOnClickListener(onGetLocation);
 
     }
 
@@ -121,9 +127,16 @@ public class InputActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         onBackPressed();
         return super.onSupportNavigateUp();
+    }
+
+    @Override
+    protected  void onDestroy() {
+        dbHelper.close();
+        super.onDestroy();
+        gpsTracker.stopUsingGPS();
     }
 
     View.OnClickListener onDone = new View.OnClickListener() {
@@ -138,8 +151,6 @@ public class InputActivity extends AppCompatActivity {
                 String lengthStr = fishlength.getText().toString();
                 String dateStr = fishdate.getText().toString();
                 String timestamp = "" + System.currentTimeMillis();
-                double lon = 0.0;
-                double lat = 0.0;
 
                 if (nameStr.trim().length() == 0 || weightStr.trim().length() == 0 || lengthStr.trim().length() == 0 || dateStr.trim().length() == 0)
                     Toast.makeText(v.getContext(), "Missing Inputs", Toast.LENGTH_LONG).show();
@@ -151,12 +162,26 @@ public class InputActivity extends AppCompatActivity {
                     byte[] image = byteArrayOutputStream .toByteArray();
 
                     // send data to sql database
-                    long id = dbHelper.insertInfo(nameStr, dateStr, lengthStr, weightStr, lat, lon, image, timestamp, timestamp);
+                    long id = dbHelper.insertInfo(nameStr, dateStr, lengthStr, weightStr, latitude, longitude, image, timestamp, timestamp);
 
                     //Toast.makeText(v.getContext(), "Record added to id: " + id, Toast.LENGTH_SHORT).show();
 
                     startActivity(new Intent(InputActivity.this, DisplayActivity.class));
                 }
+            }
+        }
+    };
+
+    View.OnClickListener onGetLocation = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (gpsTracker.canGetLocation()) {
+                latitude = gpsTracker.getLatitude();
+                longitude = gpsTracker.getLongitude();
+                String output = latitude + ", " + longitude;
+                fishlocation.setText(output);
+                Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude
+                        + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
             }
         }
     };
