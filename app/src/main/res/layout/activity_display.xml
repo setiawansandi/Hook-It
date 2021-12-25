@@ -53,7 +53,6 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="#E83F4681"
             android:contentDescription="add data"
             android:elevation="3dp"
             android:src="@drawable/ic_baseline_add_24"

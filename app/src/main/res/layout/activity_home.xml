@@ -26,7 +26,7 @@
             android:fontFamily="@font/poppins_semibold"
             android:text="P2020358 ASSIGNMENT"
             android:textColor="@color/primary"
-            android:textSize="20dp" />
+            android:textSize="19dp" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -54,7 +54,7 @@
             android:lineSpacingMultiplier="0.9"
             android:text="Welcome Back!"
             android:textColor="@color/white"
-            android:textSize="30dp" />
+            android:textSize="20dp" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -106,7 +106,8 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/ic_add" />
+                    android:background="@drawable/ic_add"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"

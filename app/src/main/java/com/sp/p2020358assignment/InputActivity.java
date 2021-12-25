@@ -104,7 +104,8 @@ public class InputActivity extends AppCompatActivity {
             DatePickerDialog datePickerDialog = new DatePickerDialog(InputActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    fishdate.setText(dayOfMonth+"/"+month+"/"+year);
+                    int setmonth = month+1;
+                    fishdate.setText(dayOfMonth+"/"+setmonth+"/"+year);
                 }
             }, mYear, mMonth, mDate);
             datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
