@@ -286,23 +286,16 @@ public class InputActivity extends AppCompatActivity {
             else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-
-                if (resultCode == RESULT_OK){
-                    Uri resultUri = result.getUri();
-                    imageUri = resultUri;
-                    fishupload.setImageURI(resultUri);
-                    // bitmap value to store in sql
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
-                        resizedBitmap = getResizedBitmap(bitmap, 650, 650);
-                        bitmap.recycle();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    Exception error = result.getError();
-                    Toast.makeText(this, "" + error, Toast.LENGTH_SHORT).show();
+                Uri resultUri = result.getUri();
+                imageUri = resultUri;
+                fishupload.setImageURI(resultUri);
+                // bitmap value to store in sql
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                    resizedBitmap = getResizedBitmap(bitmap, 650, 650);
+                    bitmap.recycle();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
             }

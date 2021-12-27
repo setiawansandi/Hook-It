@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.Objects;
 
 public class AboutActivity extends AppCompatActivity {
-    private TextView output;
+    public static TextView output;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,5 +21,16 @@ public class AboutActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         // getSupportActionBar().setHomeButtonEnabled(true); // ?
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // delete
+        output = findViewById(R.id.output);
+        fetchAPIdata process = new fetchAPIdata();
+        process.execute();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 }

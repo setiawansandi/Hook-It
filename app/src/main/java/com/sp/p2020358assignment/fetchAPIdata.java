@@ -2,6 +2,11 @@ package com.sp.p2020358assignment;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class fetchAPIdata extends AsyncTask<Void, Void, Void> {
+    String jsonData = "", debug = "";
     // bg thread
     @Override
     protected Void doInBackground(Void... voids) {
@@ -30,13 +36,47 @@ public class fetchAPIdata extends AsyncTask<Void, Void, Void> {
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             InputStream inputStream = httpURLConnection.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String line = "";
+            while (line != null) {
+                line = bufferedReader.readLine();
+                jsonData = jsonData + line;
+            }
 
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            JSONObject jsonObj = new JSONObject(jsonData);
+
+            //extracting area_metadata array from json string
+            JSONArray areaArray = jsonObj.getJSONArray("area_metadata");
+            int length = areaArray.length();
+
+            JSONArray itemsArray = jsonObj.getJSONArray("items");
+            JSONObject itemsObject = itemsArray.getJSONObject(0);
+            JSONArray forecastArray = itemsObject.getJSONArray("forecasts");
+
+
+            //loop to get all json objects from data json array
+            for (int i = 0; i < length; ++i) {
+                JSONObject areaObject = areaArray.getJSONObject(i);
+                debug = debug + areaObject.getString("name") + "\n";
+                JSONObject locObject = areaObject.getJSONObject("label_location");
+                debug = debug + locObject.getDouble("latitude") + "\n";
+                debug = debug + locObject.getDouble("longitude") + "\n";
+
+                JSONObject forecastObject = forecastArray.getJSONObject(i);
+                debug = debug + forecastObject.getString("forecast") + "\n\n";
+
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
         return null;
     }
 
@@ -44,5 +84,6 @@ public class fetchAPIdata extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void unused) {
         super.onPostExecute(unused);
+        AboutActivity.output.setText(debug);
     }
 }
