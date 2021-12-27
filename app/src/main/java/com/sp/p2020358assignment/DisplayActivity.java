@@ -23,7 +23,7 @@ public class DisplayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display);
 
         // toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_2);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_display);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

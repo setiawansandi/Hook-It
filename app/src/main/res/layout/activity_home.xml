@@ -10,7 +10,7 @@
 
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar3"
+        android:id="@+id/toolbar_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -34,7 +34,7 @@
         android:id="@+id/cardviewhome"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:layout_below="@id/toolbar3"
+        android:layout_below="@id/toolbar_home"
         android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
