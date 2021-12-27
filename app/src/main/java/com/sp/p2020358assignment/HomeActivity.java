@@ -50,6 +50,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.about:
+                intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
                 break;
             case R.id.exit:
                 exit_function();

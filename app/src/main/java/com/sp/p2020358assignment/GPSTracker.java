@@ -145,8 +145,8 @@ public class GPSTracker extends Service implements LocationListener {
         // Setting Dialog Title
         alertDialog.setTitle ("Location Permission Settings");
         // Setting Dialog Message
-        alertDialog.setMessage("Restaurant List Location Permission is not enabled." +
-                "Do you want to go to settings menu?");
+        alertDialog.setMessage("Location Permission is not enabled." +
+                " Do you want to go to settings menu?");
         // On pressing Settings button
         alertDialog.setPositiveButton ("Settings", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
