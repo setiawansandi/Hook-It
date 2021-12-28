@@ -10,13 +10,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.Objects;
 
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     public CardView input, info, about, exit;
-
+    public static TextView forecast_debug;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         info = findViewById(R.id.info);
         about = findViewById(R.id.about);
         exit = findViewById(R.id.exit);
+
+        forecast_debug = (TextView) findViewById(R.id.forecast_debug);
+        String forecast = getIntent().getStringExtra("FORECAST");
+        forecast_debug.setText(forecast);
 
         input.setOnClickListener(this);
         info.setOnClickListener(this);

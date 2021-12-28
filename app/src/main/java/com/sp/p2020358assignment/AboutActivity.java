@@ -9,8 +9,6 @@ import android.widget.TextView;
 import java.util.Objects;
 
 public class AboutActivity extends AppCompatActivity {
-    public static TextView output;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,10 +20,6 @@ public class AboutActivity extends AppCompatActivity {
         // getSupportActionBar().setHomeButtonEnabled(true); // ?
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // delete
-        output = findViewById(R.id.output);
-        fetchAPIdata process = new fetchAPIdata();
-        process.execute();
     }
 
     @Override

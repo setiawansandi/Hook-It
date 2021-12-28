@@ -56,6 +56,13 @@
             android:textColor="@color/white"
             android:textSize="20dp" />
 
+        <TextView
+            android:id="@+id/forecast_debug"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@color/cultured" />
+
         <ImageView
             android:id="@+id/imageView4"
             android:layout_width="80dp"

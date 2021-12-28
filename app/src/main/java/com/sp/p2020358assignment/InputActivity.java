@@ -123,7 +123,8 @@ public class InputActivity extends AppCompatActivity {
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-        // onClickListener
+
+        // onClickListener(s)
         fishdate.setOnClickListener(v -> {
             final Calendar calendar = Calendar.getInstance();
             mDate = calendar.get(Calendar.DATE);
