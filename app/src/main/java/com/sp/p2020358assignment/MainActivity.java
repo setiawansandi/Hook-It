@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
             weatherList = new ArrayList<>();
 
             GPSTracker gpsTrackerAsync = gpsTracker[0];
+            myLatitude = gpsTrackerAsync.getLatitude();
+            myLongitude = gpsTrackerAsync.getLongitude();
 
             @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH'%3A'mm'%3A'ss'%2B08%3A00'");
             String date = df.format(Calendar.getInstance().getTime());
@@ -153,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
             // get forecast data from nearest location
             double minarea = Double.MAX_VALUE;
             double distance;
-
             for(int i = 0; i < weatherList.size(); ++i) {
                 distance = getDistanceBetweenPoints (myLatitude, myLongitude, weatherList.get(i).getLat(), weatherList.get(i).getLon(), "Km");
                 if(distance < minarea) {
@@ -199,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                 case "Km" : distance = distance * 1.609344;
             }
 
-            return Math.round(distance);
+            return distance;
         }
     }
 
