@@ -1,5 +1,6 @@
 package sp.com.p2020358assignment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -91,15 +93,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
     }
 
     private void editDialog(String position, String id, String name, String date, String length, String weight, double lat, double lon, byte[] bitMapBytes, String addTimeStamp, String updateTimeStamp) {
+        String[] options = {"Update", "Delete"};
+        //                     0          1
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Update");
-        builder.setMessage("Do you want to update?");
-        builder.setCancelable(false);
+        builder.setTitle("Edit");
         builder.setIcon(R.drawable.ic_action_pen);
-
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setItems(options, (dialog, which) -> {
+            if (which == 0) {
                 Intent intent = new Intent(context, EditRecord.class);
                 intent.putExtra("ID", id);
                 intent.putExtra("NAME", name);
@@ -114,6 +114,26 @@ public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
                 intent.putExtra("editMode", true);
                 context.startActivity(intent);
             }
+            else if (which == 1) {
+                deleteDialog(id);
+            }
+        });
+        builder.create().show();
+    }
+
+    private void deleteDialog(final String id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete");
+        builder.setMessage("Are you sure you want to delete this record?");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                databaseHelper.deleteInfo(id);
+                ((DisplayActivity)context).onResume();
+                Toast.makeText(context,"Record Deleted", Toast.LENGTH_SHORT).show();
+            }
         });
 
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -124,7 +144,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
         });
 
         builder.create().show();
+
     }
+
 
     @Override
     public int getItemCount() {

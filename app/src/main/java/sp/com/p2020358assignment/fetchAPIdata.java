@@ -199,7 +199,7 @@ class fetchAPIdata extends AsyncTask<GPSTracker, Void, Void> {
                 context.startActivity(intent);
 
                 ((Activity) (context)).finish();
-                ;
+
             }, SPLASH_DURATION);
         } else {
             HomeActivity.home_forecast.setText(forecast);

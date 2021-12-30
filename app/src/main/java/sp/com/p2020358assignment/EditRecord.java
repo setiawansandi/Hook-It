@@ -369,7 +369,7 @@ public class EditRecord extends AppCompatActivity {
                     Toast.makeText(EditRecord.this,"Added", Toast.LENGTH_SHORT).show();
                 }
 
-                startActivity(new Intent(EditRecord.this, DisplayActivity.class));
+                //startActivity(new Intent(EditRecord.this, DisplayActivity.class));
                 finish();
             }
         }
