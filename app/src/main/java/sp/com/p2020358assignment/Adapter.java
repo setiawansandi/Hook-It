@@ -1,12 +1,15 @@
 package sp.com.p2020358assignment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,11 +55,29 @@ public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
         Bitmap bitmap = BitmapFactory.decodeByteArray(bitMapBytes , 0, bitMapBytes .length);
         double lat = model.getLat();
         double lon = model.getLon();
+        String addTimeStamp = model.getAddTimeStamp();
+        String updateTimeStamp = model.getUpdateTimeStamp();
 
         holder.rvimage.setImageBitmap(bitmap);
         holder.name.setText(name);
         holder.date.setText(date);
         holder.length_and_weight.setText(length_and_weight);
+        
+        holder.ib_pen.setOnClickListener(v -> {
+            editDialog(
+                    ""+position,
+                    id,
+                    name,
+                    date,
+                    length,
+                    weight,
+                    lat,
+                    lon,
+                    bitMapBytes,
+                    addTimeStamp,
+                    updateTimeStamp
+            );
+        });
 
         holder.itemView.setOnClickListener(v -> {
             final Intent intent;
@@ -69,6 +90,42 @@ public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
 
     }
 
+    private void editDialog(String position, String id, String name, String date, String length, String weight, double lat, double lon, byte[] bitMapBytes, String addTimeStamp, String updateTimeStamp) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Update");
+        builder.setMessage("Do you want to update?");
+        builder.setCancelable(false);
+        builder.setIcon(R.drawable.ic_action_pen);
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(context, EditRecord.class);
+                intent.putExtra("ID", id);
+                intent.putExtra("NAME", name);
+                intent.putExtra("DATE", date);
+                intent.putExtra("LENGTH", length);
+                intent.putExtra("WEIGHT", weight);
+                intent.putExtra("LAT",lat);
+                intent.putExtra("LON", lon);
+                intent.putExtra("BITMAP_BYTES", bitMapBytes);
+                intent.putExtra("ADD_TIMESTAMP", addTimeStamp);
+                intent.putExtra("UPDATE_TIMESTAMP", updateTimeStamp);
+                intent.putExtra("editMode", true);
+                context.startActivity(intent);
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.create().show();
+    }
+
     @Override
     public int getItemCount() {
         return arraylist.size();
@@ -78,6 +135,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
 
         ImageView rvimage;
         TextView name, date, length_and_weight;
+        ImageButton ib_pen;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -86,6 +144,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
             name = (TextView) itemView.findViewById(R.id.rv_fishname);
             date = (TextView) itemView.findViewById(R.id.rv_fishdate);
             length_and_weight = (TextView) itemView.findViewById(R.id.rv_fishlw);
+            ib_pen = (ImageButton) itemView.findViewById(R.id.ib_pen);
         }
     }
 }

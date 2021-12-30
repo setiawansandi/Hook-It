@@ -47,6 +47,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    // update function
+    public void updateInfo(String id, String name, String date, String length, String weight, double lat, double lon, byte[] image, String addTimeStamp, String updateTimeStamp) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(Constants.C_NAME, name);
+        cv.put(Constants.C_DATE, date);
+        cv.put(Constants.C_LENGTH, length);
+        cv.put(Constants.C_WEIGHT, weight);
+        cv.put(Constants.C_LAT, lat);
+        cv.put(Constants.C_LON, lon);
+        cv.put(Constants.C_IMAGE, image);
+        cv.put(Constants.C_ADD_TIMESTAMP, addTimeStamp);
+        cv.put(Constants.C_UPDATE_TIMESTAMP, updateTimeStamp);
+
+        db.update(Constants.TABLE_NAME, cv, Constants.C_ID + " =?", new String[]{id});
+        db.close();
+    }
+
 
     public ArrayList<Model> getAllData (String orderBy) {
         ArrayList<Model> arrayList = new ArrayList<>();

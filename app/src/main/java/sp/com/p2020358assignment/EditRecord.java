@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -37,7 +38,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class InputActivity extends AppCompatActivity {
+public class EditRecord extends AppCompatActivity {
     private EditText fishname, fishdate, fishlength, fishweight;
     private TextView fishlocation;
     private ImageButton fishupload, fishgetloc;
@@ -62,42 +63,17 @@ public class InputActivity extends AppCompatActivity {
 
     private Uri imageUri;
 
-
-    /* implicit intent (need debug: cannot get result from image cropper)
-        // assignment of activity launcher (inside onAttach or onCreate, i.e, before the activity is displayed)
-        ActivityResultLauncher<Intent> imgResultLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {     // new ActivityResultCallback<ActivityResult>("result") shortcut
-                    // There are no request codes
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData(); // deprecated >>> super.onActivityResult(requestCode, resultCode, data);
-                        // Get the url of the image from data
-                        assert data != null; // prevent nullpointerexception
-                        Uri selectedImageUri = data.getData();
-                        if (null != selectedImageUri) {
-                            // update the preview image in the layout
-                            fishupload.setImageURI(selectedImageUri);
-                            try {
-
-                                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                                resizedBitmap = getResizedBitmap(bitmap, 600, 600);
-                                bitmap.recycle();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    }
-                });
-        */
+    // for update data
+    private String id, name, date, length, weight, addTimestamp, updateTimestamp;
+    private byte[] bitMapBytes;
+    private Bitmap bitmapR;
+    double lat, lon;
+    private boolean editMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Objects.requireNonNull(getSupportActionBar()).hide();     // hide action bar
-
-        setContentView(R.layout.activity_input);
-
+        setContentView(R.layout.activity_edit_record);
         // toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_input);
         setSupportActionBar(toolbar);
@@ -118,8 +94,48 @@ public class InputActivity extends AppCompatActivity {
         cancel = (Button) findViewById(R.id.button_cancel);
         oldDrawable = fishupload.getDrawable();
         dbHelper = new DatabaseHelper(this);
-        gpsTracker = new GPSTracker(InputActivity.this);
+        gpsTracker = new GPSTracker(EditRecord.this);
 
+        Intent intent = getIntent();
+        editMode = intent.getBooleanExtra("editMode",editMode);
+        id = intent.getStringExtra("ID");
+        name = intent.getStringExtra("NAME");
+        date = intent.getStringExtra("DATE");
+        length = intent.getStringExtra("LENGTH");
+        weight = intent.getStringExtra("WEIGHT");
+        lat = intent.getDoubleExtra("lAT", 5);
+        lon = intent.getDoubleExtra("LON", 5);
+        bitMapBytes = intent.getByteArrayExtra("BITMAP_BYTES");
+        addTimestamp = intent.getStringExtra("ID");
+        updateTimestamp = intent.getStringExtra("UPDATE_TIMESTAMP");
+        bitmapR = BitmapFactory.decodeByteArray(bitMapBytes , 0, bitMapBytes .length);
+
+        if (editMode) {
+            editMode = intent.getBooleanExtra("editMode",editMode);
+            id = intent.getStringExtra("ID");
+            name = intent.getStringExtra("NAME");
+            date = intent.getStringExtra("DATE");
+            length = intent.getStringExtra("LENGTH");
+            weight = intent.getStringExtra("WEIGHT");
+            lat = intent.getDoubleExtra("LAT", 5);
+            lon = intent.getDoubleExtra("LON", 5);
+            bitMapBytes = intent.getByteArrayExtra("BITMAP_BYTES");
+            addTimestamp = intent.getStringExtra("ID");
+            updateTimestamp = intent.getStringExtra("UPDATE_TIMESTAMP");
+            bitmapR = BitmapFactory.decodeByteArray(bitMapBytes , 0, bitMapBytes .length);
+            latitude = lat;
+            longitude = lon;
+
+            fishname.setText(name);
+            fishdate.setText(date);
+            fishlength.setText(length);
+            fishweight.setText(weight);
+            fishlocation.setText(lat + ", " +lon);
+            fishupload.setImageBitmap(bitmapR);
+            latitude = lat;
+            longitude = lon;
+
+        }
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
@@ -130,7 +146,7 @@ public class InputActivity extends AppCompatActivity {
             mDate = calendar.get(Calendar.DATE);
             mMonth = calendar.get(Calendar.MONTH);
             mYear = calendar.get(Calendar.YEAR);
-            DatePickerDialog datePickerDialog = new DatePickerDialog(InputActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(EditRecord.this, android.R.style.Theme_DeviceDefault_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     int setmonth = month+1;
@@ -143,14 +159,6 @@ public class InputActivity extends AppCompatActivity {
         });
 
         fishupload.setOnClickListener(v -> {
-            /*
-            // create an instance of the intent of the type image
-            Intent i = new Intent();
-            i.setType("image/*");
-            i.setAction(Intent.ACTION_GET_CONTENT);
-
-            //imgResultLauncher.launch(Intent.createChooser(i, "Select Picture")); // pass the intent to activity launcher
-             */
             imagePickDialog();
 
         });
@@ -308,8 +316,8 @@ public class InputActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-                this.finish();
-                return true;
+            this.finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -332,36 +340,40 @@ public class InputActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             // get data
-            if (fishupload.getDrawable() == oldDrawable) Toast.makeText(v.getContext(), "You haven't chosen an image yet", Toast.LENGTH_LONG).show();
+            String nameStr = fishname.getText().toString();
+            String weightStr = fishweight.getText().toString();
+            String lengthStr = fishlength.getText().toString();
+            String dateStr = fishdate.getText().toString();
+
+
+            if (nameStr.trim().length() == 0 || weightStr.trim().length() == 0 || lengthStr.trim().length() == 0 || dateStr.trim().length() == 0)
+                Toast.makeText(v.getContext(), "Missing Inputs", Toast.LENGTH_LONG).show();
             else {
-
-                String nameStr = fishname.getText().toString();
-                String weightStr = fishweight.getText().toString();
-                String lengthStr = fishlength.getText().toString();
-                String dateStr = fishdate.getText().toString();
-
-
-                if (nameStr.trim().length() == 0 || weightStr.trim().length() == 0 || lengthStr.trim().length() == 0 || dateStr.trim().length() == 0)
-                    Toast.makeText(v.getContext(), "Missing Inputs", Toast.LENGTH_LONG).show();
-                else {
-                    // convert bitmap to bytearray + vice versa
-
+                byte[] image;
+                if (resizedBitmap != null) {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    //bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                     resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                    byte[] image = byteArrayOutputStream .toByteArray();
+                    image = byteArrayOutputStream.toByteArray();
+                } else image = bitMapBytes;
 
-                    // send data to sql database
+                if (editMode) {
+                    String newUpdateTime = "" + System.currentTimeMillis();
+
+                    dbHelper.updateInfo(id, nameStr, dateStr, lengthStr, weightStr, latitude, longitude, image, addTimestamp, newUpdateTime);
+                    Toast.makeText(EditRecord.this,"Updated", Toast.LENGTH_SHORT).show();
+
+                } else {
                     String timestamp = "" + System.currentTimeMillis();
-                    long id = dbHelper.insertInfo(nameStr, dateStr, lengthStr, weightStr, latitude, longitude, image, timestamp, timestamp);
-                    Toast.makeText(InputActivity.this,"Added", Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(v.getContext(), "Record added to id: " + id, Toast.LENGTH_SHORT).show();
 
-                    startActivity(new Intent(InputActivity.this, DisplayActivity.class));
-                    finish();
+                    long id = dbHelper.insertInfo(nameStr, dateStr, lengthStr, weightStr, latitude, longitude, image, timestamp, timestamp);
+                    Toast.makeText(EditRecord.this,"Added", Toast.LENGTH_SHORT).show();
                 }
+
+                startActivity(new Intent(EditRecord.this, DisplayActivity.class));
+                finish();
             }
         }
+
     };
 
     View.OnClickListener onGetLocation = new View.OnClickListener() {
