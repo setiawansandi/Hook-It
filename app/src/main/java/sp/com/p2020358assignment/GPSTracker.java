@@ -1,4 +1,4 @@
-package com.sp.p2020358assignment;
+package sp.com.p2020358assignment;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -16,6 +16,8 @@ import android.os.IBinder;
 import android.provider.Settings;
 
 import androidx.core.app.ActivityCompat;
+
+import sp.com.p2020358assignment.BuildConfig;
 
 public class GPSTracker extends Service implements LocationListener {
     private Context mContext = null;

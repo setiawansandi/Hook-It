@@ -6,7 +6,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.sp.p2020358assignment"
+        applicationId "sp.com.p2020358assignment"
         minSdk 23
         targetSdk 31
         versionCode 1
@@ -43,7 +43,7 @@ dependencies {
     // added
     implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.recyclerview:recyclerview:1.2.1"
-    implementation "com.theartofdev.edmodo:android-image-cropper:2.8.+"
+    implementation "com.theartofdev.edmodo:android-image-cropper:2.8.0"
     // For control over item selection of both touch and mouse driven selection
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 }

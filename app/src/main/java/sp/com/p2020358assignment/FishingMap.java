@@ -1,4 +1,4 @@
-package com.sp.p2020358assignment;
+package sp.com.p2020358assignment;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -12,12 +12,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.sp.p2020358assignment.databinding.ActivityFishingMapBinding;
+import sp.com.p2020358assignment.databinding.ActivityFishingMapBinding;
 
 public class FishingMap extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private ActivityFishingMapBinding binding;
 
     private double lat;
     private double lon;
@@ -27,23 +26,23 @@ public class FishingMap extends FragmentActivity implements OnMapReadyCallback {
     private LatLng FISHLOC;
     private LatLng ME;
 
-    GPSTracker gpsTracker;
+    private GPSTracker gpsTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fishing_map);
 
-        binding = ActivityFishingMapBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        gpsTracker = new GPSTracker(this);
+        gpsTracker = new GPSTracker(FishingMap.this);
 
         lat = getIntent().getDoubleExtra("LATITUDE", 0);
         lon = getIntent().getDoubleExtra("LONGITUDE", 0);
         fishName = getIntent().getStringExtra("NAME");
-        myLat = gpsTracker.getLatitude();
-        myLon = gpsTracker.getLongitude();
-
+        if(gpsTracker.canGetLocation()) {
+            myLat = gpsTracker.getLatitude();
+            myLon = gpsTracker.getLongitude();
+        }
+        gpsTracker.stopUsingGPS();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -66,10 +65,13 @@ public class FishingMap extends FragmentActivity implements OnMapReadyCallback {
 
         FISHLOC = new LatLng(lat,lon);
         ME = new LatLng(myLat, myLon);
-        Marker fishLoc = mMap.addMarker(new MarkerOptions().position(FISHLOC).title(fishName));
         Marker me = mMap.addMarker(new MarkerOptions().position(ME).title("ME")
                 .snippet("My location")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_me)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_me))
+                .zIndex(1));
+
+        Marker fishLoc = mMap.addMarker(new MarkerOptions().position(FISHLOC).title(fishName));
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(FISHLOC, 15));
     }
 }

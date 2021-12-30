@@ -1,4 +1,4 @@
-package com.sp.p2020358assignment;
+package sp.com.p2020358assignment;
 
 import org.junit.Test;
 

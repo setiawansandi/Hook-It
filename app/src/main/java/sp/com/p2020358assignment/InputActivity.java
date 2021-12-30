@@ -1,4 +1,4 @@
-package com.sp.p2020358assignment;
+package sp.com.p2020358assignment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
