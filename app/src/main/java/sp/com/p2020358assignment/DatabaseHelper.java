@@ -46,6 +46,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
+
+
     public ArrayList<Model> getAllData (String orderBy) {
         ArrayList<Model> arrayList = new ArrayList<>();
 
